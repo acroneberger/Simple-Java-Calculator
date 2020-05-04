@@ -11,7 +11,7 @@
 
 package simplejavacalculator;
 
-import static java.lang.Double.NaN;
+import static java.lang.Double.NaN; 
 import static java.lang.Math.log;
 import static java.lang.Math.log10;
 import static java.lang.Math.pow;
@@ -26,15 +26,16 @@ public class Calculator {
         square, squareRoot, oneDevidedBy, cos, sin, tan ,log , rate, abs
     }
 
-    private Double num1, num2;
-    private BiOperatorModes mode = BiOperatorModes.normal;
+    public Double num1;
+    public Double num2;
+    public BiOperatorModes mode = BiOperatorModes.normal;
 
-    private Double calculateBiImpl() {
+    public Double calculateBiImpl() {
         if (mode == BiOperatorModes.normal) {
             return num2;
         }
         if (mode == BiOperatorModes.add) {
-            if (num2 != 0) {
+            if (num2 != 0.0) {
                 return num1 + num2;
             }
 
