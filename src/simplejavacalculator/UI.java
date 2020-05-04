@@ -113,7 +113,7 @@ public class UI implements ActionListener {
    
    public void init() {      
       frame.setSize(450, 450);
-      frame.setVisible(true);
+      
       frame.setLocationRelativeTo(null); 
       frame.setResizable(false);
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
@@ -216,6 +216,7 @@ public class UI implements ActionListener {
       butCancel.addActionListener(this);
       
       frame.add(panel);
+      frame.setVisible(true);
    }
    
    @Override
