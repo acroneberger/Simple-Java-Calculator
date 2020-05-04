@@ -245,11 +245,12 @@ class CalculatorTest {
 	//test tangent function
 	//Note that the implementation of tangent is incorrect in the
 	//underlying code, as tangent special cases are
-	//specified in degrees while underlying math function expects radians
+	//specified in degrees while underlying math function expects radians.
+	//This test thus exposes an error in the underlying code and will currently fail.
 	void testCalculateMonoTan() {
-		assertEquals(0.0, calc.calculateMono(MonoOperatorModes.tan, 180.0));
-		assertEquals(NaN, calc.calculateMono(MonoOperatorModes.tan, 90.0));
-		assertEquals(0, calc.calculateMono(MonoOperatorModes.tan, 0.0));
+		assertEquals(0.0, calc.calculateMono(MonoOperatorModes.tan, 0.0));
+		assertEquals(1.732, calc.calculateMono(MonoOperatorModes.tan, (Math.PI / 3)), .001);
+		assertEquals(NaN, calc.calculateMono(MonoOperatorModes.tan, (Math.PI / 2)));
 	}
 	
 	@Test
