@@ -5,7 +5,9 @@ import static java.lang.Math.pow;
 import org.junit.jupiter.api.Test;
 
 import simplejavacalculator.Calculator.BiOperatorModes;
+import static java.lang.Double.NaN;
 
+import simplejavacalculator.Calculator;
 class CalculatorTest {
 	Calculator calc = new Calculator();
 	
@@ -190,5 +192,49 @@ class CalculatorTest {
 		assertNotSame(calc.calculateBiImpl(), y);
 	}
 	
+	@Test
+	void calculateBiTest_normal() {
+		assertEquals(NaN, calc.calculateBi(BiOperatorModes.normal, 1.0));
+	}
+
+	@Test
+	// 2.0 + 1.0 = 2.0
+	void calculateBiTest_add() {
+		calc.num1 = 2.0;
+		calc.mode = BiOperatorModes.add;
+		assertEquals(3.0, calc.calculateBi(calc.mode, 1.0));
+	}
+
+	@Test
+	// 2.0 - 1.0 = 1.0
+	void calculateBiTest_minus() {
+		calc.num1 = 2.0;
+		calc.mode = BiOperatorModes.minus;
+		assertEquals(1.0, calc.calculateBi(calc.mode, 1.0));
+	}
+
+	@Test
+	// 2.0 * 1.0 = 2
+	void calculateBiTest_multiply() {
+		calc.num1 = 2.0;
+		calc.mode = BiOperatorModes.multiply;
+		assertEquals(2.0, calc.calculateBi(calc.mode, 1.0));
+	}
+
+	@Test
+	// 2.0 / 1.0 = 2
+	void calculateBiTest_divide() {
+		calc.num1 = 2.0;
+		calc.mode = BiOperatorModes.divide;
+		assertEquals(2.0, calc.calculateBi(calc.mode, 1.0));
+	}
+
+	@Test
+	// 2.0 ^ 1.0 = 2.0
+	void calculateBiTest_xpowerofy() {
+		calc.num1 = 2.0;
+		calc.mode = BiOperatorModes.xpowerofy;
+		assertEquals(2.0, calc.calculateBi(calc.mode, 1.0));
+	}
 
 }
