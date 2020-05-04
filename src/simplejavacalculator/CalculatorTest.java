@@ -2,12 +2,17 @@ package simplejavacalculator;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
+import static java.lang.Math.PI;
 import org.junit.jupiter.api.Test;
 
 import simplejavacalculator.Calculator.BiOperatorModes;
+import simplejavacalculator.Calculator.MonoOperatorModes;
+
 import static java.lang.Double.NaN;
 
 import simplejavacalculator.Calculator;
+
 class CalculatorTest {
 	Calculator calc = new Calculator();
 	
@@ -193,6 +198,86 @@ class CalculatorTest {
 	}
 	
 	@Test
+	//test squaring 0, 2, -1
+	void testCalculateMonoSquare() {
+		assertEquals(4.0, calc.calculateMono(MonoOperatorModes.square, 2.0));
+		assertEquals(1.0, calc.calculateMono(MonoOperatorModes.square, -1.0));
+		assertEquals(0.0, calc.calculateMono(MonoOperatorModes.square, 0.0));
+		
+	}
+	
+	@Test
+	//test square root with 9, 0, and -1 
+	void testCalculateMonoSquareRoot() {
+	assertEquals(3.0, calc.calculateMono(MonoOperatorModes.squareRoot, 9.0));
+	assertEquals(0.0, calc.calculateMono(MonoOperatorModes.squareRoot, 0.0));
+	assertEquals(NaN, calc.calculateMono(MonoOperatorModes.squareRoot,  -1.0));
+	
+	}
+	
+	@Test
+	//test 1/x function with 5, 0, and a slight delta around 0
+	void testCalculateMonoOneDevidedBy() {
+		assertEquals(0.2, calc.calculateMono(MonoOperatorModes.oneDevidedBy, 5.0));
+		assertEquals(Double.POSITIVE_INFINITY, calc.calculateMono(MonoOperatorModes.oneDevidedBy, 0.0));
+		assertNotEquals(Double.POSITIVE_INFINITY, calc.calculateMono(MonoOperatorModes.oneDevidedBy, -.001));
+		assertNotEquals(Double.POSITIVE_INFINITY, calc.calculateMono(MonoOperatorModes.oneDevidedBy, .001));
+		
+	}
+	
+	@Test
+	//test cosine function with 0, pi/3 and pi/2 radians
+	void testCalculateMonoCos() {
+		assertEquals(1.0, calc.calculateMono(MonoOperatorModes.cos, 0.0));
+		assertEquals(.500, calc.calculateMono(MonoOperatorModes.cos, (Math.PI / 3)), .001);
+		assertEquals(0.000, calc.calculateMono(MonoOperatorModes.cos, (Math.PI / 2)), .001);
+	}
+	
+	@Test
+	//test sine function with 0, pi/3 and pi/2 radians
+	void testCalculateMonoSin() {
+		assertEquals(0.0, calc.calculateMono(MonoOperatorModes.sin, 0.0));
+		assertEquals(.866, calc.calculateMono(MonoOperatorModes.sin, (Math.PI / 3)), .001);
+		assertEquals(1.000, calc.calculateMono(MonoOperatorModes.sin, (Math.PI / 2)), .001);
+	}
+	
+	@Test
+	//test tangent function
+	//Note that the implementation of tangent is incorrect in the
+	//underlying code, as tangent special cases are
+	//specified in degrees while underlying math function expects radians
+	void testCalculateMonoTan() {
+		assertEquals(0.0, calc.calculateMono(MonoOperatorModes.tan, 180.0));
+		assertEquals(NaN, calc.calculateMono(MonoOperatorModes.tan, 90.0));
+		assertEquals(0, calc.calculateMono(MonoOperatorModes.tan, 0.0));
+	}
+	
+	@Test
+	//Test log function with 0,1, and a slight delta around 0 for boundaries
+	void testCalculateMonoLog() {
+		assertEquals(Double.NEGATIVE_INFINITY, calc.calculateMono(MonoOperatorModes.log, 0.0));
+		assertNotEquals(Double.NEGATIVE_INFINITY, calc.calculateMono(MonoOperatorModes.log, .001));
+		assertNotEquals(Double.NEGATIVE_INFINITY, calc.calculateMono(MonoOperatorModes.log, -.001));
+		assertEquals(0.0, calc.calculateMono(MonoOperatorModes.log, 1.0));
+		
+	}
+	
+	@Test
+	//Test rate calculator with 1 
+	void testCalculateMonoRate() {
+		assertEquals(.01, calc.calculateMono(MonoOperatorModes.rate, 1.0));
+	}
+	
+	@Test
+	//test calculating absolute value with 1, 0, and -1
+	void testCalculateMonoAbs() {
+		assertEquals(1.0, calc.calculateMono(MonoOperatorModes.abs, 1.0));
+		assertEquals(1.0, calc.calculateMono(MonoOperatorModes.abs, -1.0));
+		assertEquals(0.0, calc.calculateMono(MonoOperatorModes.abs, 0.0));
+	}
+	
+	
+	@Test
 	void calculateBiTest_normal() {
 		assertEquals(NaN, calc.calculateBi(BiOperatorModes.normal, 1.0));
 	}
@@ -236,5 +321,6 @@ class CalculatorTest {
 		calc.mode = BiOperatorModes.xpowerofy;
 		assertEquals(2.0, calc.calculateBi(calc.mode, 1.0));
 	}
+	
 
 }
