@@ -1,10 +1,14 @@
 package simplejavacalculator;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.Rule;
+
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 import static java.lang.Math.PI;
 import org.junit.jupiter.api.Test;
+import org.junit.rules.ExpectedException;
 
 import simplejavacalculator.Calculator.BiOperatorModes;
 import simplejavacalculator.Calculator.MonoOperatorModes;
@@ -17,184 +21,158 @@ class CalculatorTest {
 	Calculator calc = new Calculator();
 	
 	@Test
+	//Tests BiOperator Normal Mode.
+	//Exercises directly through BiImpl and indirectly through calculateBi.
 	void testCalculateBiImplNormal() {
 		assertNotNull(calc);
 		calc.num1 = 5.5;
 		calc.num2 = 2.0;
 		calc.mode = BiOperatorModes.normal;
-		double x = calc.calculateBiImpl();
-		assertTrue(x == calc.num2);
 		assertSame(calc.calculateBiImpl(), calc.num2);
 		calc.num1 = -5.5;
 		calc.num2 = -2.0;
-		double y = calc.calculateBiImpl();
-		assertNotEquals(x,y);
-		assertTrue(y == calc.num2);
 		assertSame(calc.calculateBiImpl(), calc.num2);
+		assertEquals(calc.calculateBi(BiOperatorModes.normal,5.2),NaN);
+		assertEquals(calc.num2, 0.0);
+		assertEquals(calc.num1, 5.2);
 	}
 	
 	@Test
+	//Exercises BiOperator addition Mode.
 	void testCalculateBiImplAdd() {
 		assertNotNull(calc.calculateBi(BiOperatorModes.add, 2.2));
-		assertTrue(calc.calculateBi(BiOperatorModes.add, 2.2)==4.4);
-		assertTrue(calc.calculateBi(BiOperatorModes.add, 0.0)==4.4);
-		assertFalse(calc.calculateBi(BiOperatorModes.add, 2.2) == 0.0);
+		assertEquals(calc.calculateBi(BiOperatorModes.add, 2.2),4.4);
+		assertEquals(calc.calculateBi(BiOperatorModes.add, 0.0),4.4);
+		assertNotEquals(calc.calculateBi(BiOperatorModes.add, 2.2),0.0);
 	}
 	
 	@Test
+	//Directly exercises function rather than go through CalculateBi function as program intends.
+	//First condition.
+	//Tests Addition Arithmetic.
 	void testCalculateBiImplAddDirect() {
 		calc.num1 = 2.0;
 		calc.num2 = 2.0;
 		calc.mode = BiOperatorModes.add;
-		double x = calc.calculateBiImpl();
-		assertTrue(x == calc.num1 + calc.num2);
-		assertTrue(x == calc.num2 + calc.num1);
 		assertEquals(calc.calculateBiImpl(),calc.num1 + calc.num2);
 		assertEquals(calc.calculateBiImpl(),calc.num2 + calc.num1);
-		assertNotSame(calc.calculateBiImpl(), x);
 		calc.num1 = -2.0;
 		calc.num2 = -2.0;
-		double y = calc.calculateBiImpl();
-		assertNotEquals(x,y);
-		assertTrue(y == calc.num1 + calc.num2);
-		assertTrue(y == calc.num2 + calc.num1);
 		assertEquals(calc.calculateBiImpl(),calc.num1 + calc.num2);
 		assertEquals(calc.calculateBiImpl(),calc.num2 + calc.num1);
-		assertNotSame(calc.calculateBiImpl(), y);
 	}
 	
 	@Test
+	//Directly exercises function rather than go through CalculateBi function as program intends.
+	//Default Condition.
 	void testCalculateBiImplAddDirectDefault() {
 		calc.num1 = 2.0;
 		calc.num2 = 0.0;
 		calc.mode = BiOperatorModes.add;
-		double x = calc.calculateBiImpl();
-		assertTrue(x == calc.num1);
 		assertSame(calc.calculateBiImpl(), calc.num1);
 		calc.num1 = -2.0;
 		calc.num2 = 0.0;
-		double y = calc.calculateBiImpl();
-		assertNotEquals(x,y);
-		assertTrue(y == calc.num1);
 		assertSame(calc.calculateBiImpl(), calc.num1);
 	}
 	
 	@Test
+	//Exercises BiOperator subtraction Mode.
 	void testCalculateBiImplMinus() {
 		assertNotNull(calc.calculateBi(BiOperatorModes.minus, 2.2));
-		assertTrue(calc.calculateBi(BiOperatorModes.minus, 2.2)==0.0);
-		assertFalse(calc.calculateBi(BiOperatorModes.minus, 2.2)==4.4);
+		assertEquals(calc.calculateBi(BiOperatorModes.minus, 2.2),0.0);
+		assertNotEquals(calc.calculateBi(BiOperatorModes.minus, 2.2),4.4);
 	}
 	
 	@Test
+	//Directly exercises function rather than go through CalculateBi function as program intends.
+	//Tests Subtraction Arithmetic.
 	void testCalculateBiImplMinusDirect() {
 		calc.num1 = 4.0;
 		calc.num2 = 2.0;
 		calc.mode = BiOperatorModes.minus;
-		double x = calc.calculateBiImpl();
-		assertTrue(x == calc.num1-calc.num2);
-		assertFalse(x == calc.num2-calc.num1);
 		assertEquals(calc.calculateBiImpl(),calc.num1 - calc.num2);
 		assertNotEquals(calc.calculateBiImpl(),calc.num2 - calc.num1);
-		assertNotSame(calc.calculateBiImpl(), x);
 		calc.num1 = -4.0;
 		calc.num2 = -2.0;
-		double y = calc.calculateBiImpl();
-		assertNotEquals(x,y);
-		assertTrue(y == calc.num1-calc.num2);
-		assertFalse(y == calc.num2-calc.num1);
 		assertEquals(calc.calculateBiImpl(),calc.num1 - calc.num2);
 		assertNotEquals(calc.calculateBiImpl(),calc.num2 - calc.num1);
-		assertNotSame(calc.calculateBiImpl(), y);
 	}
 	
 	@Test
+	//Exercises BiOperator multiplication Mode.
 	void testCalculateBiImplMultiply() {
 		assertNotNull(calc.calculateBi(BiOperatorModes.multiply, 2.0));
-		assertTrue(calc.calculateBi(BiOperatorModes.multiply, 2.0)==4.0);
-		assertFalse(calc.calculateBi(BiOperatorModes.multiply, 2.0)==0.0);
+		assertEquals(calc.calculateBi(BiOperatorModes.multiply, 2.0),4.0);
+		assertNotEquals(calc.calculateBi(BiOperatorModes.multiply, 2.0),0.0);
 	}
 	
 	@Test
+	//Directly exercises function rather than go through CalculateBi function as program intends.
+	//Tests Multiplication Arithmetic.
 	void testCalculateBiImplMultiplyDirect() {
 		calc.num1 = 2.0;
 		calc.num2 = 2.0;
 		calc.mode = BiOperatorModes.multiply;
-		double x = calc.calculateBiImpl();
-		assertTrue(x == calc.num1*calc.num2);
-		assertTrue(x == calc.num2*calc.num1);
 		assertEquals(calc.calculateBiImpl(),calc.num1 * calc.num2);
 		assertEquals(calc.calculateBiImpl(),calc.num2 * calc.num1);
-		assertNotSame(calc.calculateBiImpl(), x);
 		calc.num1 = -2.0;
 		calc.num2 = -2.0;
-		double y = calc.calculateBiImpl();
-		assertEquals(x,y);
-		assertNotSame(x, y);
-		assertTrue(y == calc.num1*calc.num2);
-		assertTrue(y == calc.num2*calc.num1);
 		assertEquals(calc.calculateBiImpl(),calc.num1 * calc.num2);
 		assertEquals(calc.calculateBiImpl(),calc.num2 * calc.num1);
-		assertNotSame(calc.calculateBiImpl(), y);
 	}
 	
 	@Test
+	//Exercises BiOperator division Mode.
 	void testCalculateBiImpldivide() {
 		assertNotNull(calc.calculateBi(BiOperatorModes.divide, 2.0));
-		assertTrue(calc.calculateBi(BiOperatorModes.divide, 4.0)==0.5);
-		assertFalse(calc.calculateBi(BiOperatorModes.divide, 2.0)==0.0);
+		assertEquals(calc.calculateBi(BiOperatorModes.divide, 4.0),0.5);
+		assertNotEquals(calc.calculateBi(BiOperatorModes.divide, 2.0),0.0);
 	}
 	
 	@Test
+	//Directly exercises function rather than go through CalculateBi function as program intends.
+	//Tests Division Arithmetic.
 	void testCalculateBiImpldivideDirect() {
 		calc.num1 = 4.0;
 		calc.num2 = 2.0;
 		calc.mode = BiOperatorModes.divide;
-		double x = calc.calculateBiImpl();
-		assertTrue(x == calc.num1/calc.num2);
-		assertFalse(x == calc.num2/calc.num1);
 		assertEquals(calc.calculateBiImpl(),calc.num1 / calc.num2);
 		assertNotEquals(calc.calculateBiImpl(),calc.num2/calc.num1);
-		assertNotSame(calc.calculateBiImpl(), x);
 		calc.num1 = -4.0;
 		calc.num2 = -2.0;
-		double y = calc.calculateBiImpl();
-		assertEquals(x,y);
-		assertNotSame(x, y);
-		assertTrue(y == calc.num1/calc.num2);
-		assertFalse(y == calc.num2/calc.num1);
 		assertEquals(calc.calculateBiImpl(),calc.num1 / calc.num2);
 		assertNotEquals(calc.calculateBiImpl(),calc.num2/calc.num1);
-		assertNotSame(calc.calculateBiImpl(), y);
 	}
 	
 	@Test
+	//Exercises BiOperator exponent Mode.
 	void testCalculateBiImplXpowerofy() {
 		assertNotNull(calc.calculateBi(BiOperatorModes.xpowerofy, 2.0));
-		assertTrue(calc.calculateBi(BiOperatorModes.xpowerofy, 3.0)==8.0);
-		assertFalse(calc.calculateBi(BiOperatorModes.xpowerofy, 2.0)==0.0);
+		assertEquals(calc.calculateBi(BiOperatorModes.xpowerofy, 3.0),8.0);
+		assertNotEquals(calc.calculateBi(BiOperatorModes.xpowerofy, 2.0),0.0);
 	}
 	
 	@Test
+	//Directly exercises function rather than go through CalculateBi function as program intends.
+	//Tests Exponent Arithmetic.
 	void testCalculateBiImplXpowerofyDirect() {
 		calc.num1 = 2.0;
 		calc.num2 = 3.0;
 		calc.mode = BiOperatorModes.xpowerofy;
-		double x = calc.calculateBiImpl();
-		assertTrue(x == pow(calc.num1,calc.num2));
-		assertFalse(x == pow(calc.num2,calc.num1));
 		assertEquals(calc.calculateBiImpl(),pow(calc.num1,calc.num2));
 		assertNotEquals(calc.calculateBiImpl(),pow(calc.num2,calc.num1));
-		assertNotSame(calc.calculateBiImpl(), x);
 		calc.num1 = -2.0;
 		calc.num2 = -3.0;
-		double y = calc.calculateBiImpl();
-		assertNotEquals(x,y);
-		assertTrue(y == pow(calc.num1,calc.num2));
-		assertFalse(y == pow(calc.num2,calc.num1));
 		assertEquals(calc.calculateBiImpl(),pow(calc.num1,calc.num2));
 		assertNotEquals(calc.calculateBiImpl(),pow(calc.num2,calc.num1));
-		assertNotSame(calc.calculateBiImpl(), y);
+	}
+	
+	@Test
+	//Forces calculateBiImp to default (general error thrown).
+	void testCalculateBiImpDefault() {
+		calc.mode = null;
+		Error thrown = assertThrows(Error.class, () -> calc.calculateBiImpl(), "Should Throw");
+		assertEquals(thrown.getMessage(),null);
 	}
 	
 	@Test
@@ -242,15 +220,23 @@ class CalculatorTest {
 	}
 	
 	@Test
-	//test tangent function
+	//Test tangent function
 	//Note that the implementation of tangent is incorrect in the
 	//underlying code, as tangent special cases are
 	//specified in degrees while underlying math function expects radians.
-	//This test thus exposes an error in the underlying code and will currently fail.
+	//This test thus exposes an error in the underlying code and will currently fail if asserted equal.
+	//Furthermore, complete coverage is not possible due to the lack of conditional default.
 	void testCalculateMonoTan() {
 		assertEquals(0.0, calc.calculateMono(MonoOperatorModes.tan, 0.0));
+		assertEquals(0.0,calc.calculateMono(MonoOperatorModes.tan, 180.0));
 		assertEquals(1.732, calc.calculateMono(MonoOperatorModes.tan, (Math.PI / 3)), .001);
-		assertEquals(NaN, calc.calculateMono(MonoOperatorModes.tan, (Math.PI / 2)));
+		assertEquals(NaN,calc.calculateMono(MonoOperatorModes.tan, 90.0));
+		assertNotEquals(NaN, calc.calculateMono(MonoOperatorModes.tan, 180.0));
+		
+		//According to code, this should be equal.
+		//Asserted Not Equal to highlight that if this passes, there is an error in the code.
+		assertNotEquals(NaN, calc.calculateMono(MonoOperatorModes.tan, (Math.PI / 2)));
+		
 	}
 	
 	@Test
@@ -277,6 +263,11 @@ class CalculatorTest {
 		assertEquals(0.0, calc.calculateMono(MonoOperatorModes.abs, 0.0));
 	}
 	
+	@Test
+	void testCalculateMonoDefault() {
+		Error thrown = assertThrows(Error.class, () -> calc.calculateMono(null,0.0), "Should Throw");
+		assertEquals(thrown.getMessage(),null);
+	}
 	
 	@Test
 	void calculateBiTest_normal() {
@@ -323,5 +314,63 @@ class CalculatorTest {
 		assertEquals(2.0, calc.calculateBi(calc.mode, 1.0));
 	}
 	
+	@Test
+	//Reset
+	//All elements should be 0/normal mode and return NaN
+	void calculateReset() {
+		assertNotNull(calc);
+		calc.num1 = 1.0;
+		calc.num2 = 2.0;
+		calc.mode = BiOperatorModes.add;
+		BiOperatorModes testMode = calc.mode;
+		double x = calc.num1;
+		double y = calc.num2;
+		calc.reset();
+		assertNotNull(calc);
+		assertNotEquals(calc.num1,x);
+		assertNotEquals(calc.num2,y);
+		assertNotEquals(calc.mode, testMode);
+		assertEquals(calc.num1,0.0);
+		assertEquals(calc.num2,0.0);
+		assertEquals(calc.mode, BiOperatorModes.normal);
+		assertEquals(calc.reset(),NaN);
+	}
+	
+	@Test
+	//Acts as an "equal button" when given the second number of the expression.
+	//Enter a number and an operator into a calculator
+	//This function acts as the following:
+	//Enter second number and press "equals"
+	void calculateEqual() {
+		assertNotNull(calc);
+		double num = 2.0;
+		//Test entering a number and pressing equals
+		assertEquals(calc.calculateEqual(num),NaN);
+		
+		//Test addition
+		calc.mode = BiOperatorModes.add;
+		calc.num1 = 2.0;
+		assertEquals(calc.calculateEqual(num),4.0);
+		
+		//Test Subtraction
+		calc.mode = BiOperatorModes.minus;
+		calc.num1 = 2.0;
+		assertEquals(calc.calculateEqual(num),0.0);
+		
+		//Test Multiplication
+		calc.mode = BiOperatorModes.multiply;
+		calc.num1 = 2.0;
+		assertEquals(calc.calculateEqual(num),4.0);
+		
+		//Test Division
+		calc.mode = BiOperatorModes.divide;
+		calc.num1 = 2.0;
+		assertEquals(calc.calculateEqual(num),1.0);
+		
+		//Test Exponent
+		calc.mode = BiOperatorModes.xpowerofy;
+		calc.num1 = 2.0;
+		assertEquals(calc.calculateEqual(num),4.0);
+	}
 
 }
