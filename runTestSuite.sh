@@ -1,6 +1,5 @@
 #!/bin/bash
-
-cd src/simplejavacalculator
+rm testout.txt
 numLoops=$1
 optionalEmail=$2
 echo "Starting test at $(date)" > testout.txt
@@ -38,9 +37,8 @@ msg="All tests passed, results are included in attached document"
 else
 status='FAILED'
 msg="$failtests tests failed, results are included in attached document."
-echo $msg
 fi
-echo "$msg" | mailx -s "Results from test run: $status" -a testout.txt $optionalEmail
+echo $msg | mailx -s "Results from test run: $status" -a testout.txt $optionalEmail
 fi
 
 
