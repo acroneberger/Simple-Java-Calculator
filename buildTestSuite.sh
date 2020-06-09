@@ -5,9 +5,8 @@ rm -rf testClasses
 mkdir testClasses
 javac128="/etc/alternatives/java_sdk_11_openjdk/bin/javac -J-Xms128m -J-Xmx128m"
 $javac128 -d testClasses src/simplejavacalculator/Calculator.java
-$javac128 -d testClasses src/simplejavacalculator/BufferedImageCustom.java
 echo "compiling calculator"
-$javac128 -d testClasses -cp testClasses:junit-platform-console-standalone-1.6.2.jar src/simplejavacalculator/CalculatorTest.java src/simplejavacalculator/BufferedImageCustomTest.java
+$javac128 -d testClasses -cp testClasses:junit-platform-console-standalone-1.6.2.jar src/simplejavacalculator/CalculatorTest.java
 echo "compiling unit tests"
 if [ $# -ne 0 ]
 then
